@@ -12,28 +12,43 @@
 
 ```mermaid
 flowchart LR
-    SRC1[📡 capteurs_iot.csv<br/>CSV, 51k lignes, ~3.73 Mo<br/>quasi temps réel]
-    SRC2[📋 erp_export.json<br/>JSON, 2k lignes, ~0.56 Mo<br/>export batch]
-    SRC3[📝 logs_machines.log<br/>LOG texte, 30k lignes, ~1.92 Mo<br/>événementiel continu]
-    SRC4[📄 bonus PDF maintenance<br/>non fourni sur ce lot]
+    subgraph S1[Perimetre M3-B1 - sources qualifiees]
+        SRC1[capteurs_iot.csv<br/>CSV, 51k lignes, ~3.73 Mo<br/>cadence: quasi temps reel]
+        SRC2[erp_export.json<br/>JSON, 2k lignes, ~0.56 Mo<br/>cadence: export batch]
+        SRC3[logs_machines.log<br/>LOG texte, 30k lignes, ~1.92 Mo<br/>cadence: evenementiel continu]
+        SRC4[bonus PDF maintenance<br/>non fourni sur ce lot]
+    end
 
-    INGEST[🔄 Ingestion<br/>à concevoir en M3-B2]
-    BDD[(🗄️ BDD pivot<br/>SQLite)]
-    MODEL[🧠 Modèle existant Acerox<br/>prédiction défauts qualité]
+    subgraph S2[Cible M3-B2 - chaine de traitement]
+        INGEST[Ingestion multi-sources]
+        QGATE{Controle qualite entree<br/>manquants, doublons, plages}
+        PGATE{Filtre RGPD<br/>minimisation + pseudonymisation}
+        BDD[(BDD pivot SQLite)]
+    end
 
-    SRC1 -->|mesures horodatées machine| INGEST
-    SRC2 -->|ordres, statuts, quantités| INGEST
-    SRC3 -.->|événements INFO/WARN/ERROR à parser| INGEST
-    SRC4 -.->|hors périmètre M3-B1| INGEST
-    INGEST -->|normalisation + dédup| BDD
-    BDD -->|consommée par| MODEL
+    MODEL[Modele existant Acerox<br/>prediction defauts qualite]
 
-    classDef source fill:#e1f5ff,stroke:#0277bd
-    classDef bonus fill:#f3f3f3,stroke:#6b6b6b,stroke-dasharray: 3 3
-    classDef tofix fill:#fff4e1,stroke:#c97a00,stroke-dasharray: 5 5
+    SRC1 -->|mesures horodatees machine| INGEST
+    SRC2 -->|ordres, statuts, quantites, ouvrier_id| INGEST
+    SRC3 -.->|phase 2: parsing des evenements requis| INGEST
+    SRC4 -.->|hors perimetre M3-B1| INGEST
+
+    INGEST --> QGATE --> PGATE --> BDD -->|features consolidees| MODEL
+
+    classDef source fill:#e1f5ff,stroke:#0277bd,stroke-width:1px,color:#111111
+    classDef bonus fill:#f3f3f3,stroke:#6b6b6b,stroke-dasharray: 3 3,color:#111111
+    classDef target fill:#fff4e1,stroke:#c97a00,stroke-width:1px,color:#111111
+    classDef control fill:#ffe8e8,stroke:#b04040,stroke-width:1px,color:#111111
+    classDef sink fill:#eaf7ea,stroke:#2e7d32,stroke-width:1px,color:#111111
+
+    style S1 fill:#f8fbff,stroke:#0277bd,stroke-width:1px,color:#111111
+    style S2 fill:#fffaf0,stroke:#c97a00,stroke-width:1px,color:#111111
+
     class SRC1,SRC2,SRC3 source
     class SRC4 bonus
-    class INGEST tofix
+    class INGEST,BDD target
+    class QGATE,PGATE control
+    class MODEL sink
 ```
 
 ## Légende
@@ -41,11 +56,11 @@ flowchart LR
 > Reformule en 5 lignes max ce que le schéma raconte (qui produit quelle
 > donnée, qui consomme, contraintes critiques).
 
-- **Producteurs** : ateliers Acerox via capteurs IoT, système ERP et journaux machines.
-- **Consommateur final** : le modèle existant de prédiction des défauts qualité, alimenté via la BDD pivot.
-- **Chaîne de valeur** : les données brutes convergent vers une ingestion unique puis vers SQLite pour croiser signaux process et contexte ERP.
-- **Contraintes critiques** : rythme hétérogène (quasi temps réel vs batch), qualité variable (valeurs manquantes et logs non structurés).
-- **Point RGPD** : `ouvrier_id` et certaines traces opérateur doivent être minimisés/pseudonymisés avant exploitation large.
+- **Producteurs** : atelier Acerox via capteurs IoT, ERP et logs machines.
+- **Traitement cible** : une ingestion unique alimente un controle qualite, puis un filtre RGPD, avant stockage en BDD pivot.
+- **Consommateur final** : le modele existant Acerox de prediction des defauts qualite.
+- **Contraintes critiques** : cadences heterogenes (quasi temps reel, batch, evenementiel) et logs non structures.
+- **Point RGPD operationnel** : `ouvrier_id` et traces operateur doivent etre pseudonymises avant mise a disposition analytique large.
 
 ## Décisions associées
 

@@ -13,8 +13,14 @@ Leur chef de projet, Sébastien Marchand, n'est pas data scientist.
 
 ## 2. Demande métier reformulée
 
-Suite a un entretien préliminaire Sébastien indique vouloir diminuer le taux de defaut et se situer plus en amont dans la prédiction.
-Il ne faut pas non plus avoir trop de defaut "factice" qui engendrerais des controles inutiles
+### Demande exprimee par Sebastien (verbatim metier)
+
+Sébastien demande de diminuer le taux de défaut et d'anticiper plus tôt les dérives en production.
+Il insiste aussi sur la réduction des faux positifs qui déclenchent des contrôles inutiles.
+
+### Besoin metier reformule (pour decision)
+
+Acerox a besoin d'un dispositif d'alerte qualité plus en amont, qui combine signaux capteurs et contexte de production, afin de réduire les défauts réels sans dégrader la charge atelier par des alertes non pertinentes.
 
 ## 3. Inventaire des sources
 
