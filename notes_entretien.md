@@ -7,7 +7,7 @@
 >
 > Conservé en livrable du brief.
 
-**Date** : `<date>` — **Durée** : 30 min — **Présents** : Sébastien Marchand (chef de projet industrialisation Acerox) + `<prénom>` (FastIA)
+**Date** : `30/06/2026` — **Durée** : 30 min — **Présents** : Sébastien Marchand (chef de projet industrialisation Acerox) + `Franck` (FastIA)
 
 ---
 
@@ -15,7 +15,7 @@
 
 > Quelle décision Sébastien veut-il améliorer ? Quel KPI métier ?
 
-**Dit** : ...
+**Dit** : Diminuer le taux de défaut
 
 **Interprété** : ...
 
@@ -23,7 +23,7 @@
 
 > Qu'a-t-il à disposition ? Où ? Sous quel format ?
 
-**Dit** : ...
+**Dit** : Données en provenance de capteur IOT + Logs des machines + Données ERP de gestion
 
 **Interprété** : ...
 
@@ -31,7 +31,7 @@
 
 > Combien de données ? À quelle cadence arrivent-elles ?
 
-**Dit** : ...
+**Dit** : IOT en temps réèl. Logs en temps réèl. ERP par exxtraction régulière
 
 **Interprété** : ...
 
@@ -40,7 +40,7 @@
 > Quelles obligations légales ? Qui possède les données ? Quels accès
 > sécurisés ?
 
-**Dit** : ...
+**Dit** : Sebastien ne connais pas le procesus de détection de defaut
 
 **Interprété** : ...
 
@@ -48,7 +48,7 @@
 
 > Comment Sébastien saura-t-il qu'on a réussi ?
 
-**Dit** : ...
+**Dit** : Objectif 20% de défaut
 
 **Interprété** : ...
 
@@ -69,4 +69,4 @@
 
 ---
 
-*Notes d'entretien produites par <prénom>, <date>.*
+*Notes d'entretien produites par Franck, 30/06/2026.*
